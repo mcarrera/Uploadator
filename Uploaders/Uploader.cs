@@ -52,8 +52,6 @@ namespace Uploader
                 FilesResource.CreateMediaUpload request;
 
                 // Create a new file on drive.
-                IUploadProgress result;
-
                 using (var stream = new FileStream(filePath, FileMode.Open))
                 {
                     // Create a new file, with metadata and stream.
@@ -144,10 +142,10 @@ namespace Uploader
             string credentialsFilePath = @"C:\secrets\gooogle-credentials-dev.json";
 
             string jsonString = File.ReadAllText(credentialsFilePath);
-            
+
             if (!string.IsNullOrEmpty(jsonString))
             {
-                return JsonSerializer.Deserialize<Credentials>(jsonString);
+                return JsonSerializer.Deserialize<Credentials>(jsonString)!;
             }
 
             throw new ArgumentNullException();
