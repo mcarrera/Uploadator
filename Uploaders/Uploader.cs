@@ -16,9 +16,7 @@ namespace Uploader
 
     public class Uploader
     {
-        const string folderId = "1Iue8_ctv9xs2alRiegsEIM1pac8BCGll";
-
-        private static async Task<string> UploadToDrive(string filePath)
+        private async Task<string> UploadToDrive(string filePath)
         {
             try
             {
@@ -48,7 +46,7 @@ namespace Uploader
                 var fileMetadata = new Google.Apis.Drive.v3.Data.File()
                 {
                     Name = fileName,
-                    Parents = [folderId]
+                    Parents = [GetFolderId()]
                 };
 
                 FilesResource.CreateMediaUpload request;
@@ -96,7 +94,7 @@ namespace Uploader
             return string.Empty;
         }
 
-        public static async Task Upload()
+        public async Task Upload()
         {
             var folder = "ExternalData";
             // Get a list of files in the folder
@@ -143,12 +141,15 @@ namespace Uploader
 
         private static Credentials ReadSecrets()
         {
-            string credentialsFilePath = @"C:\secrets\credentials.json";
+            string credentialsFilePath = @"C:\secrets\gooogle-credentials-dev.json";
+
             string jsonString = File.ReadAllText(credentialsFilePath);
+            
             if (!string.IsNullOrEmpty(jsonString))
             {
                 return JsonSerializer.Deserialize<Credentials>(jsonString);
             }
+
             throw new ArgumentNullException();
         }
     }

@@ -3,7 +3,9 @@ class Program
 {
     static async Task Main(string[] args)
     {
-        await Uploader.Upload();
+        var uploader =  new Uploader();
+
+        await uploader.Upload();
         
         Console.WriteLine("Press Enter to exit...");
         
