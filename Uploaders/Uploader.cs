@@ -16,7 +16,7 @@ namespace Uploader
 
     public class Uploader
     {
-        private async Task<string> UploadToDrive(string filePath)
+        private async Task<string> UploadToDrive(string filePath, string? filename)
         {
             try
             {
@@ -37,7 +37,9 @@ namespace Uploader
                 string fileExtension = Path.GetExtension(filePath);
 
                 // Generate the file name based on the creation date and original file extension
-                string fileName = $"Scuola{creationDate.ToString("ddMMMMyyyy", new System.Globalization.CultureInfo("it-IT"))}{fileExtension}";
+                string fileName = string.IsNullOrEmpty(filename) ?
+                     $"Scuola{creationDate.ToString("ddMMMMyyyy", new System.Globalization.CultureInfo("it-IT"))}{fileExtension}" :
+                     $"Scuola{filename}";
 
                 // Infer MIME type from file extension
                 string mimeType = MimeTypeMap.GetMimeType(fileExtension);
@@ -48,6 +50,9 @@ namespace Uploader
                     Name = fileName,
                     Parents = [GetFolderId()]
                 };
+
+
+                Console.WriteLine($"Uploading {mimeType} file: {filename}");
 
                 FilesResource.CreateMediaUpload request;
 
@@ -92,7 +97,7 @@ namespace Uploader
             return string.Empty;
         }
 
-        public async Task Upload()
+        public async Task Upload(string? filename)
         {
             var folder = "ExternalData";
             // Get a list of files in the folder
@@ -101,7 +106,7 @@ namespace Uploader
             // Iterate over each file and upload to Google Drive
             foreach (string filePath in files)
             {
-                await UploadToDrive(filePath);
+                await UploadToDrive(filePath, filename);
                 File.Delete(filePath);
             }
         }
