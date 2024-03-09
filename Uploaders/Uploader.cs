@@ -80,7 +80,7 @@ namespace Uploader
             }
             catch (Exception e)
             {
-                // TODO(developer) - handle error appropriately
+                // TODO - handle error appropriately
                 if (e is AggregateException)
                 {
                     Console.WriteLine("Credential Not found");
